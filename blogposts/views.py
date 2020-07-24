@@ -29,9 +29,7 @@ class ListPostView(ListView):
             queryset = queryset.filter(
                 Q(title__icontains=query) | Q(body__icontains=query) | Q(author__username=query))
             queryset = queryset.order_by('-created').filter(status='published')
-        # paginator = Paginator(queryset, 4)
-        # page_number = self.request.GET.get('page')
-        # queryset = paginator.get_page(page_number)
+            
         page = self.request.GET.get('page', 1)
         paginator = Paginator(queryset, 4)
         try:
@@ -89,10 +87,7 @@ class UserDetailListPostView(DetailView):
             print(queryset, 'bibek')
 
         try:
-            # Get the single item from the filtered queryset
-            # paginator = Paginator(queryset, 4)
-            # page_number = self.request.GET.get('page')
-            # queryset = paginator.get_page(page_number)
+
             page = self.request.GET.get('page', 1)
             paginator = Paginator(queryset, 4)
             try:
@@ -144,7 +139,6 @@ class DetailPostView(DetailView):
                 author__username=author).filter(slug=slug)
             print(queryset, 'bibek')
 
-        # If none of those are defined, it's an error.
         if pk is None and slug is None and author is None:
             raise AttributeError(
                 "Generic detail view %s must be called with either an object "
@@ -152,7 +146,6 @@ class DetailPostView(DetailView):
             )
 
         try:
-            # Get the single item from the filtered queryset
             obj = queryset.get()
             obj.count = obj.count + 1
             obj.save()
@@ -168,15 +161,6 @@ class CreatePostView(SuccessMessageMixin, CreateView):
     form_class = PostCreateForm
     success_message = 'Post was created SuccessFully'
 
-    # def post(self, request, *args, **kwargs):
-    #     form = PostCreateForm(
-    #         data=request.POST, files=request.FILES)
-    #     if form.is_valid():
-    #         cd = form.cleaned_data
-    #         obj = form.save(commit=False)
-    #         obj.author = request.user
-    #         obj.save()
-    #         return redirect('blogposts:user_post_list', request.user.username, request.user.id)
 
     def form_valid(self, form):
         form.save(commit=False)
@@ -207,7 +191,6 @@ class UpdatePostView(SuccessMessageMixin,UpdateView):
                 author__username=author).filter(slug=slug)
             print(queryset, 'bibek')
 
-        # If none of those are defined, it's an error.
         if pk is None and slug is None and author is None:
             raise AttributeError(
                 "Generic detail view %s must be called with either an object "
@@ -215,7 +198,6 @@ class UpdatePostView(SuccessMessageMixin,UpdateView):
             )
 
         try:
-            # Get the single item from the filtered queryset
             obj = queryset.get()
         except queryset.model.DoesNotExist:
             raise Http404(_("No %(verbose_name)s found matching the query") %

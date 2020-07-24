@@ -50,7 +50,6 @@ class EditView(View):
             print('---------------------------------------')
             profile_form.save()
             messages.success(request, ' Your profile has been updated successfully')
-            # return redirect('blogposts:user_post_list', request.user.username, request.user.id)
             return redirect('accounts:edit')
         else:
             messages.error(request, '   Error occured while updating your profile, Please update again')
@@ -101,7 +100,6 @@ class UserSignUpView(View):
                     mail_subject, message, to=[to_email]
                 )
                 email.send()
-                # return HttpResponse('Your accounts is created')
                 messages.success(
                     request,
                     "  Successfully SignUp! Please activate your account mail has been send to your mail box! ")
@@ -122,8 +120,6 @@ class ActivateView(View):
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
             user.save()
-            # login(request, user)
-            # return redirect('home')
             messages.success(request, "  Thank you for your email confirmation. Now you can login to your account.")
             return redirect('accounts:login')
 
@@ -159,7 +155,6 @@ class UserLoginView(View):
                         return redirect('accounts:login')
 
                 else:
-                    # messages.debug(request, 'please active your email')
                     messages.error(request, "   Your have used wrong password")
                     return redirect('accounts:login')
             else:
