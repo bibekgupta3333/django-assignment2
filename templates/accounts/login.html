@@ -1,19 +1,17 @@
-{% extends 'base.html' %}
-{% block title %} Login {% endblock %}
-{% block content %}
-    {% include 'partials/alert.html' %}
+{% extends 'base.html' %} {% block title %} Login {% endblock %} 
+{% block content %} 
+{% include 'partials/alert.html' %}
 <div class="row">
   <div class="container">
     <div
-      class="col-md-8 mt-5 mx-auto justify-content-center align-items-center"
+      class="col-md-8 mt-3 mx-auto justify-content-center align-items-center"
     >
-      <div class="m-5 shadow p-5 text-dark">
+      <div class="m-5 shadow p-5 text-dark border border-dark rounded">
         <h1>LOGIN</h1>
         <p>Please, use the following form to log-in:</p>
 
         <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
+          {% csrf_token %} {{ form.as_p }}
           <p>
             <input
               class="btn btn-secondary btn-lg"

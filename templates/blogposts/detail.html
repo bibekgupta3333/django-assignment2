@@ -71,7 +71,15 @@ BlogPosts|{{ objects.title }}
             d="M1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1v5.086z"
           />
         </svg>
-        {% for tag in objects.tags.names %} {{tag}} {% endfor %}
+             {% for tag in objects.tags.names %} 
+        {% if forloop.last %}
+        <a class="badge badge-secondary" href="/?q={{tag}}">
+          {{tag}}</a> 
+          {% else %}
+          <a class="badge badge-secondary" href="/?q={{tag}}">
+            {{tag}}</a> 
+          {% endif %}
+        {% endfor %}
       </div>
       <div class="d-inline-block float-right">
         Created: {{objects.created|date}} Modified: {{objects.updated|date}}

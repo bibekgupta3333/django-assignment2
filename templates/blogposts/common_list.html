@@ -3,7 +3,7 @@
 {% block content %}
 {% include 'partials/jumbotron.html' %}
 <div class="row my-2">
-  <div class="offset-1 col-3 offset-md-1 col-md-3 mt-3">
+  <div class="offset-1 col-3 offset-md-1 col-md-3 ">
     <div class="card bg-warning text-dark mb-5 ">
       <div class="card-header font-weight-bold">
         Featured Posts
@@ -21,10 +21,24 @@
         {% endfor %}
       </ul>
     </div>
- 
+    <div class="card bg-warning text-dark mb-5">
+      <div class="card-header font-weight-bold">
+        Search Tags
+      </div>
+      <div class="card-body bg-white">
+        {% for tag in tags %}
+          <a
+          class="text-decoration-none"
+            href="?q={{tag}}"
+            >
+            <span class="badge badge-secondary">{{ tag|upper }}</span>
+          </a>
+        {% endfor %}
+        </div>
+    </div>
     <div class="card bg-secondary text-warning ">
       <div class="card-header font-weight-bold">
-        Authors
+       Top Authors 
       </div>
       <ul class="list-group list-group-flush">
         {% for user in users %}
@@ -40,7 +54,7 @@
       </ul>
     </div>
   </div>
-  <div class="col-8 col-md-8">
+  <div class="col-8 col-md-8 ">
     {% for obj in objects %}
     <div class="card shadow border-secondary d-inline-block mx-3 mb-3" style="width: 22rem;">
       <div class="card-header text-dark bg-light">
@@ -93,11 +107,11 @@
         <br>
         <a
           href="{% url 'blogposts:detail' author=obj.author author_id=obj.author.id slug=obj.slug %}"
-          class="btn btn-secondary"
+          class="btn btn-secondary font-weight-bold"
           >Read More...</a
         >
       </div>
-      <div class="card-footer text-dark bg-light">
+      <div class="card-footer text-dark bg-light mt-3">
         <svg
           width="1em"
           height="1em"
@@ -132,7 +146,13 @@
           />
         </svg>
         {% for tag in obj.tags.names %}
-     {{tag }}
+      {% if forloop.last %}
+        <a class="badge badge-secondary" href="/?q={{tag}}">
+          {{tag}}</a>   
+        {% else %}
+        <a class="badge badge-secondary" href="/?q={{tag}}">
+          {{tag}}</a> ,   
+        {% endif %}
         {% endfor %}
       </div></li>
     </div>
