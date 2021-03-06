@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Comment
 from ckeditor.widgets import CKEditorWidget
 
 
@@ -8,7 +8,13 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["title", "image", "body", "status", "tags"]
+        fields = (
+            "title",
+            "image",
+            "body",
+            "status",
+            "tags",
+        )
         required = {"author": False}
 
     def __init__(self, *args, **kwargs):
@@ -32,11 +38,38 @@ class PostCreateForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["title", "author", "image", "body", "status", "tags"]
+        fields = (
+            "title",
+            "author",
+            "image",
+            "body",
+            "status",
+            "tags",
+        )
 
     def __init__(self, *args, **kwargs):
         super(PostCreateForm, self).__init__(*args, **kwargs)
         for key in self.fields:
-            self.fields[key].widget.attrs.update({"class": "form-control"})
+            self.fields[key].widget.attrs.update({"class": "form-control px-3"})
         self.fields["author"].widget.attrs.update({"style": "display:none;"})
         self.fields["author"].label = ""
+
+
+class CommentCreateForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = (
+            "email",
+            "user",
+            "comment_content",
+            "post",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for key in self.fields:
+            self.fields[key].widget.attrs.update({"class": "form-control"})
+        self.fields["user"].widget.attrs.update({"style": "display:none;"})
+        self.fields["user"].label = ""
+        self.fields["post"].widget.attrs.update({"style": "display:none;"})
+        self.fields["post"].label = ""

@@ -1,15 +1,15 @@
-from .models import Post
 from taggit.models import Tag
 from django.db.models import Q
 from django.http import Http404
 from django.conf import settings
+from .models import Post, Comment
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .forms import PostForm, PostCreateForm
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
+from .forms import PostForm, PostCreateForm, CommentCreateForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -139,14 +139,29 @@ class UserDetailListPostView(DetailView):
         return context
 
 
-class DetailPostView(DetailView):
+class CreateCommentView(SuccessMessageMixin, CreateView):
+    template_name = "blogposts/details.html"
+    form_class = CommentCreateForm
+    success_message = "Post was created SuccessFully"
+
+    def form_valid(self, form):
+        form.save(commit=False)
+        slug = self.kwargs.get(self.slug_url_kwarg)
+        form.instance.user = self.request.user
+        form.save()
+        return super(CreateCommentView, self).form_valid(form)
+
+
+class DetailPostView(DetailView, SuccessMessageMixin, CreateView):
     model = Post
-    form_class = PostCreateForm
+    # form_class = PostCreateForm
     context_object_name = "objects"
     slug_url_kwarg = "slug"
     pk_url_kwarg = "author_id"
     author_url_kwarg = "author"
     template_name = "blogposts/detail.html"
+    form_class = CommentCreateForm
+    success_message = "Commented SuccessFully"
 
     def get_object(self, queryset=None):
         if queryset is None:
@@ -178,6 +193,26 @@ class DetailPostView(DetailView):
                 % {"verbose_name": queryset.model._meta.verbose_name}
             )
         return obj
+
+    def form_valid(self, form):
+        form.save(commit=False)
+        slug = self.kwargs.get(self.slug_url_kwarg)
+
+        form.instance.user = self.request.user
+        form.instance.post = Post.objects.filter(slug=slug).first()
+        form.save()
+        return super(DetailPostView, self).form_valid(form)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(DetailPostView, self).get_context_data(*args, **kwargs)
+        slug = self.kwargs.get(self.slug_url_kwarg)
+        comments = (
+            Comment.objects.filter(post=Post.objects.filter(slug=slug).first())
+            .order_by("created_at")
+            .distinct()
+        )
+        context["comments"] = comments
+        return context
 
 
 @method_decorator(login_required(login_url="/accounts/login/"), name="dispatch")
@@ -228,7 +263,7 @@ class UpdatePostView(SuccessMessageMixin, UpdateView):
             obj = queryset.get()
         except queryset.model.DoesNotExist:
             raise Http404(
-                _("No %(verbose_name)s found matching the query")
+                ("No %(verbose_name)s found matching the query")
                 % {"verbose_name": queryset.model._meta.verbose_name}
             )
         return obj
