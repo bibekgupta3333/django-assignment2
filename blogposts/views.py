@@ -197,8 +197,8 @@ class DetailPostView(DetailView, SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         form.save(commit=False)
         slug = self.kwargs.get(self.slug_url_kwarg)
-
-        form.instance.user = self.request.user
+        if self.request.user.is_authenticated:
+            form.instance.user = self.request.user
         form.instance.post = Post.objects.filter(slug=slug).first()
         form.save()
         return super(DetailPostView, self).form_valid(form)

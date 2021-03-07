@@ -1,6 +1,7 @@
 {% if messages %} {% for message in messages %}
 <div
   width="50%"
+  data-dismiss="alert"
   class="alert {% if 'success' == message.tags %} alert-success {% else %} alert-danger {% endif %} alert-dismissible fade show d-flex justify-content-center mx-auto mb-0 border-bottom border-warning"
   role="alert"
 >

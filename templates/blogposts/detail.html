@@ -105,7 +105,11 @@ BlogPosts|{{ objects.title }}
     <li>           
      <div>
         <span>
-          <strong class="text-info">{{ comment.user }} </strong>
+          <strong class="text-info">{% if comment.user %}
+          {{comment.user}} {% else %}
+          anonymous
+          {% endif %}
+           </strong>
           <small class="text-muted">{{ comment.created_at | naturaltime}}</small>
         </span>
         <p>

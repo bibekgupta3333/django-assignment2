@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "blogposts",
     "taggit",
     "ckeditor",
-    "captcha",
 ]
 
 MIDDLEWARE = [
@@ -145,3 +144,38 @@ RECAPTCHA_PUBLIC_KEY = "6Lcg4LQZAAAAAO6wUpxUUfIne5VfGkNzZ6Tat233"
 RECAPTCHA_PRIVATE_KEY = "6Lcg4LQZAAAAAPTLLn7zudCyT8c3W9gnw9RrooIQ"
 RECAPTCHA_DOMAIN = "127.0.0.1"
 RECAPTCHA_REQUIRED_SCORE = 0.85
+
+# Admin Panel Configuration
+JAZZMIN_SETTINGS = {
+    "site_title": "FastAccount",
+    # Title on the brand, and the login screen (19 chars max)
+    "site_header": "FastAccount",
+    # square logo to use for your site, must be present in static files, used for favicon and brand on top left
+    # "site_logo": "https://fastaccount-landing.vercel.app/_next/image?url=%2Fimages%2Ftemp-icon-fastaccount.png",
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to fastaccount internal dashboard",
+    # Copyright on the footer
+    "copyright": "FastAccount LLC",
+    "hide_models": [
+        "contentmanager.planfeatures",
+        "contentmanager.plancustomer",
+    ],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "sites.site": "fas fa-sitemap",
+        "accounts.profile": "fas fa-id-card",
+        "blogposts.post": "fas fa-digital-tachograph",
+        "blogposts.comment": "fas fa-people-arrows",
+    },
+    "user_avatar": None,
+    "changeform_format": "single",
+    "show_ui_builder": False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "no_navbar_border": True,
+    "navbar_fixed": True,
+    "sidebar_nav_legacy_style": True,
+}
